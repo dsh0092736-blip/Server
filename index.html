@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head><meta charset="utf-8"><title>Teste RSA</title></head>
+<body>
+  <input id="msg" value="Lamine Yamal">
+  <button onclick="testar()">Criptografar</button>
+  <pre id="saida"></pre>
+<script>
+const URL_API = "https://SEU-APP.onrender.com"; // troque pela URL do Render
+
+async function post(rota, corpo) {
+  const r = await fetch(URL_API + rota, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(corpo)
+  });
+  return r.json();
+}
+
+async function testar() {
+  const c = await post("/criptografar", { mensagem: document.getElementById("msg").value });
+  const d = await post("/descriptografar", { texto: c.cifrado });
+  document.getElementById("saida").textContent =
+    "Cifrado: " + c.cifrado + "\n\nOriginal: " + d.original;
+}
+</script>
+</body>
+</html>

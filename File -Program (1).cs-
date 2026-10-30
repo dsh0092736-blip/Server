@@ -1,0 +1,31 @@
+using System;
+using System.Text;
+using System.Security.Cryptography;
+
+public class Program{
+    public static void Main(){
+        using RSA rsa = RSA.Create(2048);
+
+        byte[] chavePb = rsa.ExportRSAPublicKey();
+        byte[] chavePv = rsa.ExportRSAPrivateKey();
+
+        string Mensagem = "Lamine Yamal";
+
+        byte[] dados = Encoding.UTF8.GetBytes(Mensagem);
+
+        byte[] cifrador = rsa.Encrypt(
+            dados,
+            RSAEncryptionPadding.OaepSHA256
+        );
+
+        string cifrado = Convert.ToBase64String(cifrador);
+        Console.WriteLine("Cifrado: " + cifrado);
+
+        byte[] decifrado = rsa.Decrypt(
+            cifrador,
+            RSAEncryptionPadding.OaepSHA256
+        );
+        string original = Encoding.UTF8.GetString(decifrado);
+        Console.WriteLine("Original: " + original);
+    }
+}
